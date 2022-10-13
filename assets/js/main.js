@@ -12,10 +12,11 @@ const itTask = document.querySelector('#itTask');
 const form = document.querySelector('#form');
 const taskName = document.querySelector('#time #taskName');
 
-
+// Render the timers
 renderTasks();
 renderTime();
 
+// When we do a submit is going to create a task and render the tasks
 form.addEventListener('submit', e => {
     e.preventDefault();
 
@@ -26,17 +27,21 @@ form.addEventListener('submit', e => {
     }
 });
 
+// We create a new task
 function createTask(value){
 
+    // Random id, title with the value of the input and completed false
     const newTask = {
         id: (Math.random() * 100).toString(36).slice(3),
         title: value,
         completed: false,
     };
 
+    // We add the task in the first position of the array
     tasks.unshift(newTask);
 };
 
+// Render the task for see the new ones
 function renderTasks(){
     const html = tasks.map(task => {
         return `
@@ -52,10 +57,10 @@ function renderTasks(){
 
     const startButtons = document.querySelectorAll('.task .btn-start');
 
+    // We start the timer for the selected id
     startButtons.forEach(button => {
         button.addEventListener('click', e => {
             if(!timer){
-
                 const id = button.getAttribute('data-id');
                 startButtonHandler(id);
 
@@ -65,6 +70,7 @@ function renderTasks(){
     });
 };
 
+// We specify the time of the time and the name of the task
 function startButtonHandler(id) {
     time = 25 * 60;
     current = id;
@@ -75,9 +81,10 @@ function startButtonHandler(id) {
 
     timer = setInterval(() => {
         timeHandler(id);
-    }, 1000);
+    }, 1000); // 1sec
 };
 
+// Manage the time for the task
 function timeHandler(id){
     time--;
     renderTime();
@@ -92,11 +99,13 @@ function timeHandler(id){
     }
 };
 
+// When the time is done we complete the task
 function markCompleted(id){
     const taskIndex = tasks.findIndex((task) => task.id == id);
     tasks[taskIndex].completed = true;
 }
 
+// We set the time in the correct format
 function renderTime(){
     const timeDiv = document.querySelector('#time #value');
     const minutes = parseInt(time / 60);
@@ -105,16 +114,18 @@ function renderTime(){
     timeDiv.textContent = `${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 };
 
+// We start the break. Same as startButtonHandler but with 5mins only
 function startBreak(){
     time = 5 * 60;
     taskName.textContent = 'Break';
     renderTime();
-    
+
     timerBreak = setInterval(() => {
         timerBreakHandler();
     }, 1000);
 }
 
+// Manage the time for the break of the task
 function timerBreakHandler(){
     time--;
     renderTime();
